@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    <script type="module" src="Login.js"></script>
+    <title>Grow_Hard</title>
+    <style>
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+    
+    body
+    {background-image: url("Chess_game/Collections/Images/boy_sit.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+    min-height: 100vh;  
+    overflow: hidden;
+    }
+
+    .nav{
+    margin-top: -81px;
+    height: 700px;
+    width: 110px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: none;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: none;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-family: 'Sofia';
+    display: flex;
+    cursor:pointer;
+    }
+
+    a{
+    font-family: 'Sofia';
+    margin-left: 50%;
+    margin-top: 0%;
+    text-decoration: none;
+    display: flex;
+    color:aqua;
+    font-size: 50px;
+    background:
+    linear-gradient(
+      to right,
+      rgba(100, 200, 200, 1),
+      rgba(100, 200, 200, 1)
+    ),
+    linear-gradient(
+      to right,
+      rgba(255, 0, 0, 1),
+      rgba(255, 0, 180, 1),
+      rgba(0, 100, 200, 1)
+  );
+     background-size: 100% 3px, 0 3px;
+     background-position: 50% 100%, 0 100%;
+     background-repeat: no-repeat;
+     transition: background-size 400ms;
+     max-width: fit-content;
+    }
+
+   a:hover {
+  background-size: 0 3px, 100% 3px;
+   }
+   
+    #profilepic{
+        margin-top:10px;
+        margin-left: 1375px;
+        border-radius:50%;
+        float: left;
+        width:  80px;
+        height: 80px;
+        object-fit: cover;
+        position:absolute;
+        margin-top: 10px;
+        border: 2px solid #00FF00;  /* Neon green, change color as desired */
+        z-index: 2;
+    }
+    
+    #profiletag{
+        margin-top:17px;
+        border-radius:50%;
+        margin-left: 1345px;
+        float: left;
+        width:  70px;
+        height: 70px;
+        object-fit: cover;
+        position: absolute;
+        z-index: 2;
+
+    }
+
+   .nav span{
+    position: absolute;
+     margin-top: 105px;
+     text-decoration: none;
+     font-family: 'Sofia'; 
+     color: white; 
+     font-size: 20px;
+     margin-left:1373px;
+   }
+   
+   #displayUserPoints{
+     margin-top: 150px;
+     margin-left: 1390px;
+     font-family: 'Roboto Mono', monospace;
+     font-size: 30px;
+     font-weight: 600;
+     color: #00FF00;
+   }
+
+   #collections{
+    margin-top: 100px;
+    margin-left: 15px;
+    float: left;
+    width:  65px;
+    height: 65px;
+    object-fit: cover;
+    position: absolute;
+   }
+
+   #Featured{
+    margin-top: 220px;
+    margin-left: 15px;
+    float: left;
+    width:  65px;
+    height: 65px;
+    object-fit: cover;
+    position: absolute;
+   }
+  
+
+   mark {
+    display: inline-block;
+  line-height: 0em;
+  padding-bottom: 0.5em;
+  color:#000000;
+  background: linear-gradient(180deg,rgba(255,255,255,0) 50%, #FFD0AE 50%);
+
+  }
+
+    </style>
+</head>
+<body>
+    <a href=""> Home </a>
+    <a id="chess" href="./Chess_game/index.html" style="margin-top: -5%; margin-left: 65%;">Chess</a>
+    <div class="nav">
+      <div style="position:relative;">
+         <img id="profilepic" src="./Chess_game/Collections/Images/My_profile_pic.jpg">
+         <span id="displayUsername"></span> 
+         <span id="displayUserPoints"></span>
+         <img id="profiletag" src="./Chess_game/Collections/Images/Queen-Icon.png"> 
+         <img id="collections" src="./Chess_game/Collections/Images/yen.png" alt="">
+         <img id="Featured" src="./Chess_game/Collections/Images/feature-selection.png">
+      </div>
+      <i style="color: rgb(223, 15, 67);   margin-top: 153px; margin-left: 1300px; font-size: 30px; font-weight:bold; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Points:</i>
+      <i id="Logout" style="font-weight: bold; font-size: 25px; margin-top: 500px; margin-left: -1270%; color:rgb(157, 121, 157)"> <mark> Log-Out </mark></i>
+    </div>
+
+</body>
+<script type="module" src="getUserInfo.js"></script>
+<script type="module">
+    document.addEventListener("DOMContentLoaded", () => {
+    const username = localStorage.getItem('currentuser'); // Retrieve the username from local storage
+    const userPoints = localStorage.getItem('currentuserpoints'); // Retrieve the user points from local storage
+    //forward userid
+    document.getElementById('displayUsername').textContent = username ? `${username}` : 'Username not set';
+    document.getElementById('displayUserPoints').textContent = userPoints ? `${userPoints}` : 'Points not available';
+    if(!username)
+     {window.location.replace("http://127.0.0.1:5500/Login.html");
+     }
+    
+    function Logoutuser(){
+     alert("Successfully Logout!");
+     localStorage.clear();
+     window.location.replace('http://127.0.0.1:5500/Login.html');
+    }
+
+    Logout.addEventListener('click',Logoutuser);
+});
+</script>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="Login.css">
+    <script type="module" src="Login.js"></script>
+    <script type="module" src="getUserInfo.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Document</title>
+</head>
+<body>
+  <div class="container">
+    <div class="form signup">
+      <h2>Sign Up</h2>
+      <div class="inputBox">
+        <input type="text" id="new-username" required="required">
+        <i class="fa-regular fa-user"></i>
+        <span>username</span>
+      </div>
+      <div class="inputBox">
+        <input type="text" id="new-email" required="required">
+        <i class="fa-regular fa-envelope"></i>
+        <span>email address</span>
+      </div>
+      <div class="inputBox">
+        <input type="password" id="new-password" required="required">
+        <i class="fa-solid fa-lock"></i>
+        <span>create password</span>
+      </div>
+      <div class="inputBox">
+        <input type="password" required="required">
+        <i class="fa-solid fa-lock"></i>
+        <span>confirm password</span>
+      </div>
+      <div class="inputBox">
+        <input type="submit" value="Create Account" id="createUserButton">
+      </div>
+      <p>Already a member ? <a href="#" class="login" onclick="Signin()">Log in</a></p>
+    </div>
+  
+    <div class="form signin">
+      <h2>Sign In</h2>
+      <div class="inputBox">
+        <input type="text" required="required" id="username">
+        <i class="fa-regular fa-user"></i>
+        <span>username</span>
+      </div>
+      <div class="inputBox">
+        <input type="password" required="required" id="password">
+        <i class="fa-solid fa-lock"></i>
+        <span>password</span>
+      </div>
+      <div class="inputBox">
+        <input type="submit" value="Login" id="loginButton">
+      </div>
+      <p>Not Registered ? <a href="#" class="create">Create an account</a></p>
+      <p><a href="#" id="update">update</a></p>
+      <p><a href="#" id="delete">delete</a></p>
+
+    </div>
+  
+  </div>
+  
+  <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyA2u8QsfBm5nCaKXHOSoOHUpNNue9TVpWY",
+        authDomain: "chessgame-v1.firebaseapp.com",
+        projectId: "chessgame-v1",
+        storageBucket: "chessgame-v1.appspot.com",
+        messagingSenderId: "979066764497",
+        appId: "1:979066764497:web:a54f68afffbdb692f119f0",
+        measurementId: "G-HS1LMRSPQ7"
+      };
+
+      const app = initializeApp(firebaseConfig);
+
+      import { getDatabase, ref, child, get, set, update, remove } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+
+      const db=getDatabase();
+      //Id's from new user data
+      let new_username=document.getElementById("new-username");
+      let new_email=document.getElementById("new-email");
+      let new_password=document.getElementById("new-password");
+
+      //Id's from login 
+      let username=document.getElementById("username");
+      let password=document.getElementById("password");
+      
+      //eventListener's
+      let adduser=document.getElementById("createUserButton");
+      let loginuser=document.getElementById("loginButton");
+      let updateuser=document.getElementById("update");
+      let deleteuser=document.getElementById("delete");
+      
+      function AddData(){
+        set(ref(db, 'UsersInfo/'+ new_username.value ), {
+           username: new_username.value,
+           email: new_email.value,
+           password: new_password.value,
+           points: Number(1000)
+        })
+        .then(()=>{
+          alert("User Data added Succesfully!");
+        })
+        .catch((error)=>{
+          alert("Unsuccesfull attempt!!");
+          // console.log(error);
+        })
+      }
+     
+      function RetData(){
+        const dbref=ref(db);
+        localStorage.clear();
+        get(child(dbref, 'UsersInfo/'+ username.value)).then((snapshot)=>{
+          if(snapshot.exists()){
+            if(password.value===snapshot.val().password){
+              alert("Successfully Logined!");
+              
+              localStorage.setItem('currentuser',snapshot.val().username);
+              localStorage.setItem('currentuserpoints',snapshot.val().points);
+
+              window.location.replace("http://127.0.0.1:5500/Home.html");
+            }
+            else{
+              alert("Wrong Password!");
+            }
+          }
+          else{
+            alert("User Doesn't Exists!");
+          }
+        }).catch((error)=>{
+           console.log(error);
+        });
+      }
+
+      function updateData(){
+        update(ref(db, 'UsersInfo/'+ new_username.value ), {
+           username: new_username.value,
+           email: new_email.value,
+           password: new_password.value
+        })
+        .then(()=>{
+          alert("User Data updated Succesfully!");
+        })
+        .catch((error)=>{
+          alert("Unsuccesfull attempt!!");
+          // console.log(error);
+        })
+      }      
+
+
+      function DeleteData(){
+      let usernameToDelete = document.getElementById("username").value; // This should fetch the username from your login form
+      if (usernameToDelete) {
+        remove(ref(db, 'UsersInfo/' + usernameToDelete))
+        .then(() => {
+          alert("User Data Deleted Successfully!");
+        })
+        .catch((error) => {
+          alert("Unsuccessful attempt!!");
+          console.log(error);
+        });
+      } else {
+        alert("Username is required to delete a user.");
+      }
+    }
+
+
+      adduser.addEventListener('click',AddData);
+      loginuser.addEventListener('click',RetData);
+      updateuser.addEventListener('click',updateData);
+      deleteuser.addEventListener('click',DeleteData);
+
+  </script>
+
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    let login = document.querySelector(".login");
+    let create = document.querySelector(".create");
+    let container = document.querySelector(".container");
+    let globalusername;
+    let globalpoints;
+    login.onclick = function () {
+      container.classList.add("signinForm");
+    };
+  
+    create.onclick = function () {
+      container.classList.remove("signinForm");
+    };
+  });
+</script>
+
+</html>
+
+
+
+
+
+
+
