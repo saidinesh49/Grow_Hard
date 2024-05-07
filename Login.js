@@ -1,42 +1,46 @@
-// import { users, addUser } from './getUserInfo.js';
+document.addEventListener("DOMContentLoaded", function() {
+    let loginForm = document.querySelector(".signin");
+    let signupForm = document.querySelector(".signup");
+    let forgotForm = document.querySelector(".forgot");
+    let verifyForm = document.querySelector(".verify");
+    let updateForm = document.querySelector(".update");
 
-// let globalusername;
-// let globalpoints;
+    let loginLink = document.querySelector(".login");
+    let createAccountLink = document.querySelector(".create");
+    let forgotPasswordLink = document.querySelector(".forgotpassword");
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     const loginButton = document.getElementById("loginButton");
-//     if (loginButton) {
-//         loginButton.addEventListener("click", CheckForUserLogin);
-//     }
+    // Function to hide all forms
+    function hideAllForms() {
+        if (loginForm) loginForm.style.display = 'none';
+        if (signupForm) signupForm.style.display = 'none';
+        if (forgotForm) forgotForm.style.display = 'none';
+        if (verifyForm) verifyForm.style.display = 'none';
+        if (updateForm) updateForm.style.display = 'none';
+    }
 
-//     const createUserButton = document.getElementById("createUserButton");
-//     if (createUserButton) {
-//         createUserButton.addEventListener("click", () => {
-//             const username = document.getElementById("new-username").value;
-//             const email = document.getElementById("new-email").value;
-//             const password = document.getElementById("new-password").value;
-//             addUser({ username: username, password: password, email: email, points: 500 });
-//             alert("User added!");
-//             console.log(users);
-//         });
-//     }
-// });
+    // Adding checks before adding event listeners
+    if (loginLink) {
+        loginLink.addEventListener("click", function() {
+            hideAllForms();
+            if (loginForm) loginForm.style.display = 'flex';
+        });
+    }
 
-// function CheckForUserLogin() {
-//     const username = document.querySelector("input[type='text'][name='username']").value;
-//     const password = document.querySelector("input[type='password'][name='password']").value;
-//     const valid = users.find(user => user.username === username && user.password === password);
-//     if (valid) {
-//         alert("Successfully logged in!");
-//         window.location.replace("http://127.0.0.1:5500/Home.html");
-//         localStorage.setItem('globalusername', username);
-//         localStorage.setItem('globalpoints', valid.points);  // Correct this line
-//         globalusername = username;
-//         globalpoints = valid.points; // This line has no effect after redirection
-//     } else {
-//         alert("Invalid Entry!!");
-//     }
-//     return;
-// }
+    if (createAccountLink) {
+        createAccountLink.addEventListener("click", function() {
+            hideAllForms();
+            if (signupForm) signupForm.style.display = 'flex';
+        });
+    }
 
-// export { CheckForUserLogin , globalusername, globalpoints };
+    if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener("click", function() {
+            hideAllForms();
+            if (forgotForm) forgotForm.style.display = 'flex';
+        });
+    }
+
+    // Initially show only the login form
+    hideAllForms();
+    if (loginForm) loginForm.style.display = 'flex';
+});
