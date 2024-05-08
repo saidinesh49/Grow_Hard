@@ -1,4 +1,4 @@
-import { globalState, keySquareMapper } from "../index.js";
+import { globalState, keySquareMapper } from "../chess.js";
 
 class HypotheticalBoard {
     constructor(data){

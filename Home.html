@@ -163,7 +163,7 @@
 </head>
 <body>
     <a href=""> Home </a>
-    <a id="chess" href="./Chess_game/index.html" style="margin-top: -5%; margin-left: 65%;">Chess</a>
+    <a id="chess" href="./Chess_game/chess.html" style="margin-top: -5%; margin-left: 65%;">Chess</a>
     <div class="nav">
       <div style="position:relative;">
          <img id="profilepic" src="./Chess_game/Collections/Images/My_profile_pic.jpg">
@@ -186,13 +186,13 @@
     document.getElementById('displayUsername').textContent = username ? `${username}` : 'Username not set';
     document.getElementById('displayUserPoints').textContent = userPoints ? `${userPoints}` : 'Points not available';
     if(!username)
-     {window.location.replace("./Login.html");
+     {window.location.replace("/");
      }
     
     function Logoutuser(){
      alert("Successfully Logout!");
      localStorage.clear();
-     window.location.replace('./Login.html');
+     window.location.replace('/');
     }
 
     Logout.addEventListener('click',Logoutuser);
