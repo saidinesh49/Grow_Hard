@@ -21,7 +21,7 @@ import { ROOT_DIV } from "../Helper/constants.js";
 import { clearHightlight } from "../Render/main.js";
 import { selfHighlight } from "../Render/main.js";
 import { globalStateRender } from "../Render/main.js";
-import { globalState, keySquareMapper } from "../index.js";
+import { globalState, keySquareMapper } from "../chess.js";
 import { globalPiece } from "../Render/main.js";
 import pawnPromotion from "../Helper/modalCreator.js";
 import HypotheticalClass from "../Others/HypotheticalBoard.js";

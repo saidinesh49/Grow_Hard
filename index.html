@@ -103,7 +103,7 @@
     <script type="text/javascript">
       (function(){
         emailjs.init({
-          publicKey: "YOUR_PUBLIC_KEY",
+          publicKey: "OLGRbJGEdGwl5Sb9g",
         });
       })();
   </script>
@@ -113,13 +113,13 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
 
     const firebaseConfig = {
-          apiKey: "your-api-key",
-          authDomain: "your-auth-domain",
-          projectId: "your-project-id",
-          storageBucket: "your-storage-bucket",
-          messagingSenderId: "your-messaging-sender-id",
-          appId: "your-app-id",
-          measurementId: "your-measurement-id"
+      apiKey: "AIzaSyA2u8QsfBm5nCaKXHOSoOHUpNNue9TVpWY",
+      authDomain: "chessgame-v1.firebaseapp.com",
+      projectId: "chessgame-v1",
+      storageBucket: "chessgame-v1.appspot.com",
+      messagingSenderId: "979066764497",
+      appId: "1:979066764497:web:a54f68afffbdb692f119f0",
+      measurementId:"G-HS1LMRSPQ7"
         };
 
       const app = initializeApp(firebaseConfig);
@@ -186,8 +186,8 @@
         message: userotp,
       };
     
-      const serviceID = "YOUR_SERVICE_ID";
-      const templateID = "YOUR_TEMPLATE_ID";
+      const serviceID = "service_i4pm21n";
+      const templateID = "template_xdrpih6";
 
       emailjs.send(serviceID, templateID, params)
         .then((response) => {
