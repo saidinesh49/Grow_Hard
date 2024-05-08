@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="Login.css">
     <script type="module" src="Login.js"></script>
-    <script type="module" src="getUserInfo.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress/nprogress.css">
+    <script src="https://cdn.jsdelivr.net/npm/nprogress/nprogress.js"></script>
+    <link rel="icon" type="image/svg" href="./Chess_game/Collections/Images/growth.png">
+    <title>Grow_Hard</title>
 </head>
 <body>
   <div class="container">
@@ -29,14 +31,14 @@
         <span>create password</span>
       </div>
       <div class="inputBox">
-        <input type="password" required="required">
+        <input type="password" id="new-confirm-password" required="required">
         <i class="fa-solid fa-lock"></i>
         <span>confirm password</span>
       </div>
       <div class="inputBox">
         <input type="submit" value="Create Account" id="createUserButton">
       </div>
-      <p>Already a member ? <a href="#" class="login" onclick="Signin()">Log in</a></p>
+      <p>Already a member ? <a href="#" class="login">Log in</a></p>
     </div>
   
     <div class="form signin">
@@ -55,24 +57,69 @@
         <input type="submit" value="Login" id="loginButton">
       </div>
       <p>Not Registered ? <a href="#" class="create">Create an account</a></p>
-      <p><a href="#" id="update">update</a></p>
-      <p><a href="#" id="delete">delete</a></p>
-
+      <p><a href="#" class="forgotpassword">Forgot Password</a></p>
     </div>
-  
+
+    <div class="form forgot">
+      <h2>Reset Password</h2>
+      <div class="inputBox">
+        <input type="text" required="required" id="forgotpassusername">
+        <i class="fa-regular fa-user"></i>
+        <span>username</span>
+      </div>
+      <div class="inputBox">
+        <input type="submit" value="Send OTP  &#8680;" id="sendotp">
+      </div>
+    </div>
+
+    <div class="form verify">
+      <h2>Verify OTP</h2>
+      <div class="inputBox">
+        <input type="text" required="required" id="userotp">
+        <i class="fa-regular fa-user"></i>
+        <span>Enter the OTP...</span>
+      </div>
+      <div class="inputBox">
+        <input type="submit" value="Verify" id="verifyotp">
+      </div>
+    </div>
+
+    <div class="form update">
+      <h2>Update Your Password</h2>
+      <div class="inputBox">
+        <input type="password" required="required" id="updated_password">
+        <i class="fa-solid fa-lock"></i>
+        <span>New Password</span>
+      </div>
+      <div class="inputBox">
+        <input type="submit" value="Update" id="updatepassword">
+      </div>
+    </div>
+
   </div>
   
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+  </script>
+    <script type="text/javascript">
+      (function(){
+        emailjs.init({
+          publicKey: "YOUR_PUBLIC_KEY",
+        });
+      })();
+  </script>
+
+
   <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
 
     const firebaseConfig = {
-            apiKey: "YOUR_API_KEY_HERE",
-            authDomain: "YOUR_AUTH_DOMAIN_HERE",
-            projectId: "YOUR_PROJECT_ID_HERE",
-            storageBucket: "YOUR_STORAGE_BUCKET_HERE",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
-            appId: "YOUR_APP_ID_HERE",
-            measurementId: "YOUR_MEASUREMENT_ID_HERE"
+          apiKey: "your-api-key",
+          authDomain: "your-auth-domain",
+          projectId: "your-project-id",
+          storageBucket: "your-storage-bucket",
+          messagingSenderId: "your-messaging-sender-id",
+          appId: "your-app-id",
+          measurementId: "your-measurement-id"
         };
 
       const app = initializeApp(firebaseConfig);
@@ -84,34 +131,105 @@
       let new_username=document.getElementById("new-username");
       let new_email=document.getElementById("new-email");
       let new_password=document.getElementById("new-password");
-
+      let new_confirm_password=document.getElementById("new-confirm-password");
       //Id's from login 
       let username=document.getElementById("username");
       let password=document.getElementById("password");
       
+      //forgot password username
+      let forgotpassusername=document.getElementById("forgotpassusername");
+      
+      //Updating Password value
+      let updated_password=document.getElementById("updated_password");
+
       //eventListener's
       let adduser=document.getElementById("createUserButton");
       let loginuser=document.getElementById("loginButton");
-      let updateuser=document.getElementById("update");
-      let deleteuser=document.getElementById("delete");
-      
+      let sendotp=document.getElementById("sendotp");
+      let verifyotp=document.getElementById("verifyotp");
+      let updatepassword=document.getElementById("updatepassword");
+
+      //Form events
+      let loginForm = document.querySelector(".signin");
+      let signupForm = document.querySelector(".signup");
+      let forgotForm = document.querySelector(".forgot");
+      let verifyForm = document.querySelector(".verify");
+      let updateForm = document.querySelector(".update");
+
+      function hideAllForms() {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'none';
+        forgotForm.style.display = 'none';
+        verifyForm.style.display = 'none';
+        updateForm.style.display = 'none';
+      }
+
+      function showForm(formName) {
+      hideAllForms();
+      document.querySelector(`.${formName}`).style.display = 'flex';
+      }
+
+    function generateOTP() {
+        const digits = '0123456789';
+        let OTP = '';
+        for (let i = 0; i < 6; i++ ) {
+            OTP += digits[Math.floor(Math.random() * 10)];
+        }
+        return OTP;
+    }
+
+
+    function sendMail(username, useremail, userotp) {
+      var params = {
+        username: username,
+        email: useremail,
+        message: userotp,
+      };
+    
+      const serviceID = "YOUR_SERVICE_ID";
+      const templateID = "YOUR_TEMPLATE_ID";
+
+      emailjs.send(serviceID, templateID, params)
+        .then((response) => {
+          console.log("Successfully sent email!", response);
+        })
+        .catch((err) => console.log("Failed to send email!", err));
+      }
+
+
       function AddData(){
-        set(ref(db, 'UsersInfo/'+ new_username.value ), {
-           username: new_username.value,
-           email: new_email.value,
-           password: new_password.value,
-           points: Number(1000)
-        })
-        .then(()=>{
-          alert("User Data added Succesfully!");
-        })
-        .catch((error)=>{
-          alert("Unsuccesfull attempt!!");
-          // console.log(error);
-        })
+        const dbref=ref(db);
+        localStorage.clear();
+        get(child(dbref, 'UsersInfo/'+ new_username.value)).then((snapshot)=>{
+          if( !(snapshot.exists()) && (new_username.value!="" && (new_username.value).length>=5 && new_password.value!="") )
+             {
+                if(new_password.value!=new_confirm_password.value){
+                    alert("NEW password & CONFIRM passord should must be same!!!");
+                    return;
+                }
+                set(ref(db, 'UsersInfo/'+ new_username.value ), {
+                  username: new_username.value,
+                  email: new_email.value,
+                  password: new_password.value,
+                  points: Number(1000)
+                })
+                .then(()=>{
+                  alert("SignUp Succesfull..! Please Login!!");
+                  location.reload();
+                })
+                .catch((error)=>{
+                  alert("Unsuccesfull attempt!!");
+                  // console.log(error);
+                });
+          }
+        else if((new_username.value).length<5) {alert("UserName Must contain atleast 5 characters");}
+        else if(new_password.value=="") alert("Invalid Password");
+        else {alert("UserName Already Exists! Try something else!");}
+        });
       }
      
       function RetData(){
+        NProgress.start();
         const dbref=ref(db);
         localStorage.clear();
         get(child(dbref, 'UsersInfo/'+ username.value)).then((snapshot)=>{
@@ -122,7 +240,7 @@
               localStorage.setItem('currentuser',snapshot.val().username);
               localStorage.setItem('currentuserpoints',snapshot.val().points);
 
-              window.location.replace("http://127.0.0.1:5500/Home.html");
+              window.location.replace("/Home.html");
             }
             else{
               alert("Wrong Password!");
@@ -133,66 +251,90 @@
           }
         }).catch((error)=>{
            console.log(error);
+          })
+          .finally(() => {
+          NProgress.done();
         });
       }
+      
+      document.getElementById('sendotp').addEventListener('click', function() {
+        const forgotpassusername = document.getElementById('forgotpassusername').value;
+        if (forgotpassusername) {
+            get(child(ref(db), 'UsersInfo/' + forgotpassusername)).then(snapshot => {
+                if (snapshot.exists()) {
+                    const userotp = generateOTP();
+                    set(ref(db, 'OTPs/' + forgotpassusername), { otp: userotp, timestamp: new Date().getTime() });
+                    sendMail(snapshot.val().username, snapshot.val().email, userotp);
+                    console.log("OTP sent to:", snapshot.val().email);
+                    alert("OTP sent to your email: " + snapshot.val().email);
+                    showForm('verify');
+                } else {
+                    alert("User does not exist!");
+                }
+            }).catch(error => {
+                console.error("Error fetching user data:", error);
+                alert("Failed to fetch user data.");
+            });
+        } else {
+            alert("Username is required!");
+        }
+    });
 
-      function updateData(){
-        update(ref(db, 'UsersInfo/'+ new_username.value ), {
-           username: new_username.value,
-           email: new_email.value,
-           password: new_password.value
-        })
-        .then(()=>{
-          alert("User Data updated Succesfully!");
-        })
-        .catch((error)=>{
-          alert("Unsuccesfull attempt!!");
-          // console.log(error);
-        })
-      }      
 
 
-      function DeleteData(){
-      let usernameToDelete = document.getElementById("username").value; // This should fetch the username from your login form
-      if (usernameToDelete) {
-        remove(ref(db, 'UsersInfo/' + usernameToDelete))
-        .then(() => {
-          alert("User Data Deleted Successfully!");
-        })
-        .catch((error) => {
-          alert("Unsuccessful attempt!!");
-          console.log(error);
+    document.getElementById('verifyotp').addEventListener('click', function() {
+        const userEnteredOTP = document.getElementById('userotp').value;
+        const forgotpassusername = document.getElementById('forgotpassusername').value;
+
+        get(child(ref(db), 'OTPs/' + forgotpassusername)).then(snapshot => {
+            if (snapshot.exists() && snapshot.val().otp === userEnteredOTP) {
+                const otpTimestamp = snapshot.val().timestamp;
+                const currentTime = new Date().getTime();
+                // Verify if OTP is still valid, let's assume OTP is valid for 10 minutes (600000 milliseconds)
+                if (currentTime - otpTimestamp <= 600000) {
+                    alert("OTP verified successfully!");
+                    remove(ref(db, 'OTPs/' + forgotpassusername)); // Remove OTP from the database after verification
+                    // proceed with password reset functionality
+
+                    showForm('update');
+                    updatepassword.addEventListener('click',()=>{
+                    update(ref(db, 'UsersInfo/'+ forgotpassusername), {
+                    password: updated_password.value
+                  })
+                  .then(()=>{
+                    alert("Your Password updated Succesfully!");
+                    location.reload();
+                  })
+                  .catch((error)=>{
+                    alert("Unsuccesfull attempt!!");
+                    console.log(error);
+                  })
+                });
+                    
+                } else {
+                    alert("OTP has expired. Please request a new one.");
+                    remove(ref(db, 'OTPs/' + forgotpassusername)); // Clean up expired OTP
+                    location.reload();
+                }
+            } else {
+                alert("Invalid OTP. Please try again.");
+            }
+        }).catch(error => {
+            console.error("Error verifying OTP:", error);
+            alert("Error during OTP verification.");
         });
-      } else {
-        alert("Username is required to delete a user.");
-      }
-    }
+    });
+
 
 
       adduser.addEventListener('click',AddData);
       loginuser.addEventListener('click',RetData);
-      updateuser.addEventListener('click',updateData);
-      deleteuser.addEventListener('click',DeleteData);
+      // sendotp.addEventListener('click',PasswordReset);
+      // deleteuser.addEventListener('click',DeleteData);
 
   </script>
 
 </body>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-    let login = document.querySelector(".login");
-    let create = document.querySelector(".create");
-    let container = document.querySelector(".container");
-    let globalusername;
-    let globalpoints;
-    login.onclick = function () {
-      container.classList.add("signinForm");
-    };
-  
-    create.onclick = function () {
-      container.classList.remove("signinForm");
-    };
-  });
-</script>
 
 </html>
 
