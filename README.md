@@ -5,7 +5,7 @@ Repo For Nft based games
 
 ## How to contribute:
 - Clone the repo **`git clone https://github.com/saidinesh49/Grow_Hard.git`**
-- And then create a new Branch on your local repo with the name of your game. (Please Don't make a PR's directly on the main branch).
+- And then create a new-Branch on your local repo with the name of your game. (Please Don't make PR's directly on the main branch).
 - Create a folder in the Grow_Hard **`(root directory)`** with the name of the game you want to add **`example_game`**
 - Commit with a purposeful message, mentioning how it is useful: eg.., **`git commit -m "purpose_of_the_game"`**
 
