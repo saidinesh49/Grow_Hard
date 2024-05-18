@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="Collections/Images/grow.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia&effect=neon|outline|emboss|shadow-multiple">
+    <link rel="stylesheet" href="Styles/style.css">
+    <title>Chess</title>
+    <style>
+        body {
+            background-image: url("Collections/Images/Space_bg_img_2.jpg");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+            background-size: cover;
+            min-height: 100vh;
+        }
+
+        .userselect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: none;
+            font-family: sans-serif;
+        }
+
+        .userselect-content {
+            background: linear-gradient(to top, rgb(0, 0, 0), rgb(138, 43, 226)); /* Gradient from black to violet */
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            width: 80%;
+            max-width: 500px;
+            color: white;
+        }
+
+        .userselect button {
+            background-color: rgb(15, 196, 24);
+            margin: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 80%;
+            max-width: 200px;
+            border: none;
+            color: #060229; /* Dark text for contrast */
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .userselect button:hover {
+            transform: translateY(-5px);
+        }
+
+        .userselect p {
+            font-family: "Sofia", sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        .choices {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .goBack {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-top: 20px;
+            font-weight: bold;
+            padding: 0;
+            width: auto;
+            transition: none;
+        }
+
+        .goBack:hover {
+            color: #ccc;
+        }
+
+        .goBack i {
+            margin-right: 5px;
+            font-size: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .userselect-content {
+                width: 95%;
+            }
+
+            .userselect-content button {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- Modal Overlay -->
+    <div class="userselect" id="userselect">
+        <div class="userselect-content">
+            <div class="main-options">
+                <p>How do you want to play?</p>
+                <button id="playOnline">Play Online</button>
+                <button id="playOffline">Play Offline</button>
+            </div>
+
+            <!-- Sub choices for online play -->
+            <div class="choices online">
+                <p>Play with??</p>
+                <button id="playFriend">With a Friend</button>
+                <button id="playRandom">Random Player</button>
+                <a class="goBack"><i>&#x2190;</i> Go Back</a>
+            </div>
+
+            <!-- Sub choices for offline play -->
+            <div class="choices offline">
+                <p>Choose your mode:</p>
+                <button id="playBot">Play with a BOT</button>
+                <button id="playTwoPlayer">1 System Two Player's</button>
+                <a class="goBack"><i>&#x2190;</i> Go Back</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="chess.js"></script>
+    <script type="module">
+    document.addEventListener("DOMContentLoaded", () => {
+        const username = localStorage.getItem('currentuser');
+        const userPoints = localStorage.getItem('currentuserpoints');
+
+        if (!username) {
+            window.location.replace("../index.html");
+        } else {
+            document.getElementById('userselect').style.display = 'flex';
+        }
+
+        const mainOptions = document.querySelector('.main-options');
+        const onlineChoices = document.querySelector('.online');
+        const offlineChoices = document.querySelector('.offline');
+
+        document.getElementById('playOnline').addEventListener('click', () => {
+            mainOptions.classList.add('hide');
+            onlineChoices.classList.add('show');
+        });
+
+        document.getElementById('playOffline').addEventListener('click', () => {
+            mainOptions.classList.add('hide');
+            offlineChoices.classList.add('show');
+        });
+
+        const goBackButtons = document.querySelectorAll('.goBack');
+        goBackButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                onlineChoices.classList.remove('show');
+                offlineChoices.classList.remove('show');
+                mainOptions.classList.remove('hide');
+            });
+        });
+
+        document.getElementById('playTwoPlayer').addEventListener('click',()=>{
+            document.querySelector(".userselect").style.display='none';
+        });
+
+
+        // document.getElementById('playFriend').addEventListener('click', () => {
+        //     window.location.href = 'http://localhost:64138'; // Update this with the correct path
+        // });
+
+    });
+    </script>
+</body>
+</html>

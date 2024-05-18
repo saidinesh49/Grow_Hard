@@ -1,5 +1,5 @@
 import { renderHighlight } from "../Render/main.js";
-import { globalState } from "../index.js";
+import { globalState } from "../chess.js";
 
 function Great(){
     alert("Hello, World");
